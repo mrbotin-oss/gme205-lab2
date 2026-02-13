@@ -71,4 +71,45 @@ class Point:
     # -------------------------------------------------------
     # Part C. Designing a Spatial Collection: PointSet (The Challenge)
     # -------------------------------------------------------
-    
+import csv
+class PointSet:
+    def __init__(self, points):
+        # stores a collection of Point objects
+        self.points = points
+
+    @classmethod
+    def from_csv(cls, path):
+        """
+        Read points from a CSV file and return a PointSet.
+        Invalid rows are skipped gracefully.
+        """
+        points = []
+
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                try:
+                    points.append(Point.from_row(row))
+                except ValueError:
+                    # skip invalid rows
+                    continue
+
+        return cls(points)
+
+    def count(self):
+        """Return the number of valid points."""
+        return len(self.points)
+
+    def bbox(self):
+        """Return (min_lon, min_lat, max_lon, max_lat)."""
+        lons = [p.lon for p in self.points]
+        lats = [p.lat for p in self.points]
+        return min(lons), min(lats), max(lons), max(lats)
+
+    def filter_by_tag(self, tag):
+        """
+        Return a new PointSet with only points matching the tag.
+        Does NOT mutate the original PointSet.
+        """
+        return PointSet([p for p in self.points if p.tag == tag])
+

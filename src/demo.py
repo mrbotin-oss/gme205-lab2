@@ -10,3 +10,17 @@ print(distance)  # m
 a = Point ("B", 122.0, 13.6)
 print(p.distance_to(a))
 
+
+from spatial import PointSet
+
+def main():
+    points = PointSet.from_csv("data/points.csv")
+
+    print("Point count:", points.count())
+    print("Bounding box:", points.bbox())
+
+    tagged_points = points.filter_by_tag("restaurant")
+    print("Restaurant points:", tagged_points.count())
+
+if __name__ == "__main__":
+    main()
