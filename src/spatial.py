@@ -113,3 +113,14 @@ class PointSet:
         """
         return PointSet([p for p in self.points if p.tag == tag])
 
+
+    def get_tag_counts(self):
+        """
+        Returns a dictionary with the count of each tag
+        """
+        counts = {}
+        for p in self.points:
+            # Use "unlabeled" if the tag is None or empty
+            tag_name = p.tag if p.tag else "unlabeled"
+            counts[tag_name] = counts.get(tag_name, 0) + 1
+        return counts
